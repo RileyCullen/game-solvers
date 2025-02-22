@@ -1,10 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { Container } from './main-container';
 
 createRoot(document.getElementById('root')!)
     .render(
         <StrictMode>
-            <h1>Hello, world</h1>      
+            <Container />
         </StrictMode>
     );
 
