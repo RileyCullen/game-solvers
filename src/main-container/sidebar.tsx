@@ -1,38 +1,36 @@
+import { App } from '../apps';
+import { MainContext } from './main-context';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
+import { useContext } from 'react';
 
 /** Props for {@link Sidebar}. */
 interface SidebarProps {
-    /** Items to display in sidebar. */
-    items: SidebarItem[];
     /** Update current item. */
-    updateCurrentItem(item: SidebarItem): void;
-}
-
-/** Side bar item interface. */
-export interface SidebarItem {
-    /** Unique ID to represent sidebar item. */
-    id: string;
-    /** Presentation label to display in sidebar. */
-    label: string;
+    updateCurrentItem(id: App['id']): void;
 }
 
 /** Sidebar to select sub-application. */
 export function Sidebar(props: SidebarProps) {
-    const { items, updateCurrentItem } = props;
+    const { updateCurrentItem } = props;
+    const { appService } = useContext(MainContext);
+
+    const appIds = appService.getRegisteredApps();
+
     return (
         <Drawer variant='permanent'>
             <Toolbar />
             <List>
                 {
-                    items.map((item) => (
-                        <SidebarListElement
-                            key={item.id}
-                            item={item}
+                    appIds.map((id) => (
+                        <SidebarItem
+                            key={id}
+                            id={id}
+                            label={appService.getLabel(id)}
                             updateCurrentItem={updateCurrentItem}
                         />
                     ))
@@ -42,25 +40,27 @@ export function Sidebar(props: SidebarProps) {
     );
 }
 
-/** Props for {@link SidebarListElement}. */
-interface SidebarListElementProps {
+/** Props for {@link SidebarItem}. */
+interface SidebarItemProps {
     /** Key to differentiate list elements. */
     key: string;
-    /** Item to be displayed. */
-    item: SidebarItem;
+    /** Unique identifier for Sidebar item. */
+    id: App['id'];
+    /** Display label. */
+    label: App['label'];
     /** Callback to update currently selected sidebar item. */
     updateCurrentItem: SidebarProps['updateCurrentItem'];
 }
 
 /** Internal/helper component to display sidebar items. */
-function SidebarListElement(props: SidebarListElementProps) {
-    const { item, updateCurrentItem } = props;
+function SidebarItem(props: SidebarItemProps) {
+    const { id, label, updateCurrentItem } = props;
     return (
         <ListItem>
             <ListItemButton
-                onClick={() => updateCurrentItem(item)}
+                onClick={() => updateCurrentItem(id)}
             >
-                <ListItemText primary={item.label} />
+                <ListItemText primary={label} />
             </ListItemButton>
         </ListItem>
     );

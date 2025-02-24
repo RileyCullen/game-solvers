@@ -1,16 +1,12 @@
+import { MainContext } from './main-context';
 import BaseAppBar from '@mui/material/AppBar'; 
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-
-/** Props for {@link Appbar} component. */
-interface AppBarProps {
-    /** Title displayed within {@link AppBar}.  */
-    title: string;
-}
+import { useContext } from 'react';
 
 /** Application information bar present at top of the UI. */
-export function AppBar(props: AppBarProps) {
-    const { title } = props;
+export function AppBar() {
+    const { appService, currentAppId } = useContext(MainContext);
     return (
         <BaseAppBar
             sx={{
@@ -18,7 +14,7 @@ export function AppBar(props: AppBarProps) {
             }}
         >
             <Toolbar>
-                <Typography variant='h6'>{title}</Typography>
+                <Typography variant='h6'>{appService.getLabel(currentAppId)}</Typography>
             </Toolbar>
         </BaseAppBar>
     );
