@@ -51,7 +51,7 @@ export class ErrorSwallowingAppService implements AppService {
      */
     public getLabel(id: App['id']) {
         const label = this._registeredApps.get(id)?.label;
-        return (label) ? label : '';
+        return label ?? '';
     }
 
     /**
@@ -60,7 +60,7 @@ export class ErrorSwallowingAppService implements AppService {
      */
     public createComponent(id: App['id']) {
         const component = this._registeredApps.get(id)?.component;
-        return (component) ? component : null;
+        return component ?? null;
     }
 }
 
