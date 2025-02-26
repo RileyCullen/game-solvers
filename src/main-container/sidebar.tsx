@@ -14,6 +14,7 @@ interface SidebarProps {
     updateCurrentItem(id: App['id']): void;
 }
 
+const drawerWidth = 180;
 /** Sidebar to select sub-application. */
 export function Sidebar(props: SidebarProps) {
     const { updateCurrentItem } = props;
@@ -22,7 +23,12 @@ export function Sidebar(props: SidebarProps) {
     const appIds = appService.getRegisteredApps();
 
     return (
-        <Drawer variant='permanent'>
+        <Drawer 
+            variant='permanent'
+            sx={{
+                width: drawerWidth,
+            }}
+        >
             <Toolbar />
             <List>
                 {
