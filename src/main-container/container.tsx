@@ -25,7 +25,12 @@ export function Container() {
                     currentAppId: appId
                 }}
             >
-                <Box sx={{ display: 'flex' }}>
+                <Box
+                    sx={{
+                        display: 'flex',
+                        width: '100%'
+                    }}
+                >
                     <AppBar />
                     <Sidebar updateCurrentItem={setAppId} />
                     <AppContainer>
@@ -54,7 +59,11 @@ interface AppContainerProps {
 function AppContainer(props: AppContainerProps) {
     const { children } = props;
     return (
-        <Box>
+        <Box
+            sx={{
+                flexGrow: 1,
+            }}
+        >
             <Toolbar />
             {children}
         </Box>
