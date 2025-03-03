@@ -16,11 +16,13 @@ export interface Cell {
     color: string;
 }
 
+/** A cell that displays a string */
 export interface StringCell extends Cell {
     type: CellTypes.String;
     value: string;
 }
 
+/** Utility function to check if cell displays a string */
 export function isStringCell(cell: Cell): cell is StringCell {
     return cell.type === CellTypes.String;
 }
