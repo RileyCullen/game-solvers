@@ -3,13 +3,12 @@ import { AppBar } from './app-bar';
 import { MainContext } from './main-context';
 import { Sidebar } from './sidebar';
 import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
 import Toolbar from '@mui/material/Toolbar';
 import { useState, useMemo, ComponentType, ReactNode } from 'react';
 
 /** Main application container (i.e., entry point to the application).*/
 export function Container() {
-    const [ appId, setAppId ] = useState(DEFAULT_APP.id);
+    const [appId, setAppId] = useState(DEFAULT_APP.id);
     const appService = useMemo(
         () => new ErrorSwallowingAppService(APP_DEFINITIONS),
         []
