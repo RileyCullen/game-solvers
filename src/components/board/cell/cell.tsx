@@ -12,7 +12,7 @@ export function Cell(props: CellProps) {
             className={styles['cell-container']}
         >
             {/*ToDo: Refactor to support more node types*/}
-            {cell.value as String}
+            {cell.value as string}
         </div>
     );
 }
