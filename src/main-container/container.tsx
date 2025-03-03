@@ -48,7 +48,7 @@ function ComponentNotFound() {
     );
 }
 
-/** Props for {@link AappContainer}. */
+/** Props for {@link AppContainer}. */
 interface AppContainerProps {
     /** Sub application to render. */
     children: ReactNode;
