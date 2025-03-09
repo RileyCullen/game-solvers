@@ -36,7 +36,23 @@ export default function QueensSolver() {
 
     return (
         <div>
-            <Board board={board} />
+            <Board
+                board={board}
+                cellEventHandlers={{
+                    onClick(cell) {
+                        console.log(`Clicked ${cell.id}`);
+                    },
+                    onMouseEnter(cell) {
+                        console.log(`Mouse enter ${cell.id}`);
+                    },
+                    onMouseDown(cell) {
+                        console.log(`Mouse down ${cell.id}`);
+                    },
+                    onMouseUp(cell) {
+                        console.log(`Mouse up ${cell.id}`);
+                    }
+                }}
+            />
         </div>
     );
 }
