@@ -7,7 +7,7 @@ import styles from './board.module.css';
 export interface BoardProps {
     /** Board information. */
     board: BoardModel;
-    cellEventHandlers: CellEventHandlers;
+    cellEventHandlers?: CellEventHandlers;
 }
 
 /** Display component for board. */
@@ -37,7 +37,7 @@ export function Board(props: BoardProps) {
 export interface BoardRowProps {
     /** Cell column values for a row. */
     values: CellModel[];
-    cellEventHandlers: CellEventHandlers;
+    cellEventHandlers?: CellEventHandlers;
 }
 
 /** Display component for a board row. */

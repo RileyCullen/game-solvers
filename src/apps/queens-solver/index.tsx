@@ -1,59 +1,55 @@
-import { Board, BoardModel, CellTypes } from '../../components';
+import { Board, BoardModel, CellModel, CellTypes } from '../../components';
+import { QueensBoardModel } from './queens-board-model';
+import { useState, useRef } from 'react';
 
 export default function QueensSolver() {
-    const board: BoardModel = {
-        cells: [
-            [
-                {
-                    type: CellTypes.String,
-                    id: '00',
-                    value: 'A',
-                    color: ''
-                },
-                {
-                    type: CellTypes.String,
-                    id: '01',
-                    value: '',
-                    color: ''
-                },
-            ],
-            [
-                {
-                    type: CellTypes.String,
-                    id: '10',
-                    value: 'C',
-                    color: ''
-                },
-                {
-                    type: CellTypes.String,
-                    id: '11',
-                    value: 'D',
-                    color: ''
-                },
-            ]
-        ]
-    };
+    const [board, setBoard] = useState(new QueensBoardModel(5));
+    const [isMultiCellEditing, setIsMultiCellEditing] = useState(false);
+
+    const targetCells = useRef<CellModel[]>([]);
+    const startingCell = useRef<CellModel>(null);
 
     return (
         <div>
             <Board
                 board={board}
                 cellEventHandlers={{
-                    onClick(cell) {
-                        console.log(`Clicked ${cell.id}`);
-                    },
-                    onMouseEnter(cell) {
-                        console.log(`Mouse enter ${cell.id}`);
-                    },
-                    onMouseDown(cell) {
-                        console.log(`Mouse down ${cell.id}`);
-                    },
-                    onMouseUp(cell) {
-                        console.log(`Mouse up ${cell.id}`);
-                    }
+                    onClick,
+                    onMouseEnter,
+                    onMouseDown,
+                    onMouseUp
                 }}
             />
         </div>
     );
+
+    function onClick(cell: CellModel) {
+        board.setCell(cell.id);
+        setBoard(QueensBoardModel.fromBoardModel(board));
+    }
+
+    function onMouseEnter(cell: CellModel) {
+        if (isMultiCellEditing) {
+            if (startingCell.current) {
+                targetCells.current.push(startingCell.current);
+                startingCell.current = null;
+            }
+            targetCells.current.push(cell);
+        }
+    }
+
+    function onMouseDown(cell: CellModel) {
+        startingCell.current = cell;
+        setIsMultiCellEditing(true);
+    }
+
+    function onMouseUp(cell: CellModel) {
+        setIsMultiCellEditing(false);
+        if (targetCells) {
+            board.setCells(targetCells.current.map(({ id }) => id));
+            targetCells.current = [];
+            setBoard(QueensBoardModel.fromBoardModel((board)));
+        }
+    }
 }
 
