@@ -35,7 +35,7 @@ export function BoardSize(props: BoardSizeProps) {
             <TextField
                 label='Board Size'
                 size='small'
-                defaultValue={currentSize}
+                value={currentSize}
                 slotProps={{
                     input: {
                         readOnly: true
