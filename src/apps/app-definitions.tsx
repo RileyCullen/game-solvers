@@ -1,10 +1,15 @@
 import { Board, BoardModel, CellTypes } from '../components';
 import { App } from './app';
+import QueensSolver from './queens-solver';
 
 export const DEFAULT_APP: App = {
     id: 'queens-solver',
     label: 'Queens Solver',
-    component: () => <p>Queens!</p>
+    component() {
+        return (
+            <QueensSolver />
+        );
+    }
 };
 
 export const APP_DEFINITIONS: App[] = [

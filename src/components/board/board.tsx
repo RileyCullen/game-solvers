@@ -1,4 +1,4 @@
-import { Cell } from './cell/cell';
+import { Cell, CellEventHandlers } from './cell/cell';
 import { Cell as CellModel } from './cell/types';
 import { Board as BoardModel } from './types';
 import styles from './board.module.css';
@@ -7,11 +7,15 @@ import styles from './board.module.css';
 export interface BoardProps {
     /** Board information. */
     board: BoardModel;
+    cellEventHandlers?: CellEventHandlers;
 }
 
 /** Display component for board. */
 export function Board(props: BoardProps) {
-    const { board } = props;
+    const {
+        board,
+        cellEventHandlers
+    } = props;
     const { cells } = board;
     return (
         <div
@@ -19,7 +23,10 @@ export function Board(props: BoardProps) {
         >
             {
                 cells.map((row) => (
-                    <BoardRow values={row} />
+                    <BoardRow
+                        values={row}
+                        cellEventHandlers={cellEventHandlers}
+                    />
                 ))
             }
         </div>
@@ -30,18 +37,25 @@ export function Board(props: BoardProps) {
 export interface BoardRowProps {
     /** Cell column values for a row. */
     values: CellModel[];
+    cellEventHandlers?: CellEventHandlers;
 }
 
 /** Display component for a board row. */
 export function BoardRow(props: BoardRowProps) {
-    const { values } = props;
+    const {
+        values,
+        cellEventHandlers
+    } = props;
     return (
         <div
             className={styles['board-row']}
         >
             {
                 values.map((cell) => (
-                    <Cell cell={cell} />
+                    <Cell
+                        {...cellEventHandlers}
+                        cell={cell}
+                    />
                 ))
             }
         </div>
