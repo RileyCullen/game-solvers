@@ -1,30 +1,73 @@
+import { Box } from '@mui/material';
 import { Board, BoardModel, CellModel, CellTypes } from '../../components';
 import { QueensBoardModel } from './queens-board-model';
 import { useState, useRef } from 'react';
+import { BoardSize } from './components/board-size';
+import { useBoard } from './use-board';
+import { EditMode, QueensEditModes } from './components/edit-mode';
 
 export default function QueensSolver() {
-    const [board, setBoard] = useState(new QueensBoardModel(5));
+    const { board, setBoard, boardSize, setBoardSize } = useBoard(5);
     const [isMultiCellEditing, setIsMultiCellEditing] = useState(false);
+    const [editMode, setEditMode] = useState(QueensEditModes.CellContent);
+    const [color, setColor] = useState('#FFFFFF');
 
     const targetCells = useRef<CellModel[]>([]);
     const startingCell = useRef<CellModel>(null);
 
     return (
-        <div>
-            <Board
-                board={board}
-                cellEventHandlers={{
-                    onClick,
-                    onMouseEnter,
-                    onMouseDown,
-                    onMouseUp
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: '20px'
+            }}
+        >
+            <Box
+                sx={{
+                    paddingTop: '10px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    rowGap: '10px'
                 }}
-            />
-        </div>
+            >
+                <BoardSize
+                    currentSize={boardSize}
+                    setSize={setBoardSize}
+                />
+                <EditMode
+                    editMode={editMode}
+                    setEditMode={setEditMode}
+                    color={color}
+                    setColor={setColor}
+                />
+            </Box>
+            <Box>
+                <Board
+                    board={board}
+                    cellEventHandlers={{
+                        onClick,
+                        onMouseEnter,
+                        onMouseDown,
+                        onMouseUp
+                    }}
+                />
+            </Box>
+        </Box>
     );
 
     function onClick(cell: CellModel) {
-        board.setCell(cell.id);
+        const { id } = cell;
+        switch (editMode) {
+            case QueensEditModes.Color:
+                board.setCellColor(id, color);
+                break;
+            case QueensEditModes.CellContent:
+                board.setCell(id);
+                break;
+            default:
+                throw new Error('Unexpected edit mode on click.');
+        }
         setBoard(QueensBoardModel.fromBoardModel(board));
     }
 
@@ -46,7 +89,17 @@ export default function QueensSolver() {
     function onMouseUp(cell: CellModel) {
         setIsMultiCellEditing(false);
         if (targetCells) {
-            board.setCells(targetCells.current.map(({ id }) => id));
+            const cellIds = targetCells.current.map(({ id }) => id);
+            switch (editMode) {
+                case QueensEditModes.Color:
+                    board.setCellsColor(cellIds, color);
+                    break;
+                case QueensEditModes.CellContent:
+                    board.setCells(cellIds);
+                    break;
+                default:
+                    throw new Error('Unexpected edit mode on mouse up.');
+            }
             targetCells.current = [];
             setBoard(QueensBoardModel.fromBoardModel((board)));
         }

@@ -69,6 +69,18 @@ export class QueensBoardModel implements BoardModel {
         });
     }
 
+    public setCellColor(id: CellModel['id'], color: string) {
+        const currentCell = this._getCurrentCellFromId(id);
+        currentCell.color = color;
+    }
+
+    public setCellsColor(ids: CellModel['id'][], color: string) {
+        ids.forEach((id) => {
+            const currentCell = this._getCurrentCellFromId(id);
+            currentCell.color = color;
+        });
+    }
+
     private _getCurrentCellFromId(id: CellModel['id']) {
         const [row, column] = this._getRowAndColumnFromId(id);
         return this._cells[row][column];

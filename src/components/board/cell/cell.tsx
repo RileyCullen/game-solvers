@@ -26,6 +26,9 @@ export function Cell(props: CellProps) {
     return (
         <div
             className={styles['cell-container']}
+            style={{
+                backgroundColor: cell.color
+            }}
             onClick={() => onClick?.(cell)}
             onMouseEnter={() => onMouseEnter?.(cell)}
             onMouseDown={() => onMouseDown?.(cell)}
