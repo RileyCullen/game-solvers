@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { Board, BoardModel, CellModel, CellTypes } from '../../components';
+import { Board, CellModel } from '../../components';
 import { QueensBoardModel } from './queens-board-model';
 import { useState, useRef } from 'react';
 import { BoardSize } from './components/board-size';
@@ -86,7 +86,7 @@ export default function QueensSolver() {
         setIsMultiCellEditing(true);
     }
 
-    function onMouseUp(cell: CellModel) {
+    function onMouseUp() {
         setIsMultiCellEditing(false);
         if (targetCells) {
             const cellIds = targetCells.current.map(({ id }) => id);
