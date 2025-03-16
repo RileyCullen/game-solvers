@@ -6,13 +6,18 @@ import { useBoard } from './use-board';
 import { QueensEditModes } from './components/configuration-panel/panel-sections/edit-mode';
 import { ConfigurationPanel } from './components/configuration-panel/configuration-panel';
 
+interface AppDimensions {
+    height: number;
+    width: number;
+}
+
 export default function QueensSolver() {
     const { board, setBoard, boardSize, setBoardSize } = useBoard(5);
     const [isMultiCellEditing, setIsMultiCellEditing] = useState(false);
     const [editMode, setEditMode] = useState(QueensEditModes.CellContent);
     const [color, setColor] = useState('#FFFFFF');
 
-    const [appHeight, setAppHeight] = useState<number>();
+    const [appDimensions, setAppDimensions] = useState<AppDimensions>();
     const containerRef = useRef<HTMLDivElement>(null);
 
     const targetCells = useRef<CellModel[]>([]);
@@ -38,8 +43,10 @@ export default function QueensSolver() {
                 display: 'flex',
                 flexDirection: 'row',
                 gap: '20px',
-                height: (appHeight) ? `${appHeight}px` : 'auto',
-                overflow: 'clip'
+                height: (appDimensions) ? `${appDimensions.height}px` : 'auto',
+                width: (appDimensions) ? `${appDimensions.width}px` : 'auto',
+                overflow: 'clip',
+                border: '1px solid red'
             }}
         >
             <ConfigurationPanel
@@ -121,13 +128,25 @@ export default function QueensSolver() {
     function resize() {
         const configurationPanel = containerRef.current;
         if (configurationPanel) {
-            const viewportHeight = window.innerHeight;
-            const height = viewportHeight
-                - configurationPanel.offsetTop
-                - 0;
-            setAppHeight(height);
+            const height = calculateSize(
+                window.innerHeight,
+                configurationPanel.offsetTop,
+                5
+            );
+            const width = calculateSize(
+                window.innerWidth,
+                configurationPanel.offsetLeft,
+                5
+            );
+            setAppDimensions({
+                height,
+                width
+            });
         }
     }
 
+    function calculateSize(size: number, offset: number, margin: number) {
+        return size - offset - margin;
+    }
 }
 

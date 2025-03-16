@@ -28,7 +28,8 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
                 display: 'flex',
                 flexDirection: 'column',
                 rowGap: '10px',
-                margin: '10px'
+                margin: '10px',
+                minWidth: 'fit-content'
             }}
         >
             <BoardSize
