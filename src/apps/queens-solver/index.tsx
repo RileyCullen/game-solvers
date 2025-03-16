@@ -2,9 +2,9 @@ import { Box } from '@mui/material';
 import { Board, CellModel } from '../../components';
 import { QueensBoardModel } from './queens-board-model';
 import { useState, useRef } from 'react';
-import { BoardSize } from './components/board-size';
 import { useBoard } from './use-board';
-import { EditMode, QueensEditModes } from './components/edit-mode';
+import { QueensEditModes } from './components/configuration-panel/panel-sections/edit-mode';
+import { ConfigurationPanel } from './components/configuration-panel/configuration-panel';
 
 export default function QueensSolver() {
     const { board, setBoard, boardSize, setBoardSize } = useBoard(5);
@@ -23,26 +23,19 @@ export default function QueensSolver() {
                 gap: '20px'
             }}
         >
+            <ConfigurationPanel
+                boardSize={boardSize}
+                setBoardSize={setBoardSize}
+                editMode={editMode}
+                setEditMode={setEditMode}
+                color={color}
+                setColor={setColor}
+            />
             <Box
                 sx={{
-                    paddingTop: '10px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    rowGap: '10px'
+                    padding: '10px'
                 }}
             >
-                <BoardSize
-                    currentSize={boardSize}
-                    setSize={setBoardSize}
-                />
-                <EditMode
-                    editMode={editMode}
-                    setEditMode={setEditMode}
-                    color={color}
-                    setColor={setColor}
-                />
-            </Box>
-            <Box>
                 <Board
                     board={board}
                     cellEventHandlers={{
