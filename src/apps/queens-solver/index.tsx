@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import { Board, CellModel } from '../../components';
 import { QueensBoardModel } from './queens-board-model';
-import { useState, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useBoard } from './use-board';
 import { QueensEditModes } from './components/configuration-panel/panel-sections/edit-mode';
 import { ConfigurationPanel } from './components/configuration-panel/configuration-panel';
@@ -12,15 +12,34 @@ export default function QueensSolver() {
     const [editMode, setEditMode] = useState(QueensEditModes.CellContent);
     const [color, setColor] = useState('#FFFFFF');
 
+    const [appHeight, setAppHeight] = useState<number>();
+    const containerRef = useRef<HTMLDivElement>(null);
+
     const targetCells = useRef<CellModel[]>([]);
     const startingCell = useRef<CellModel>(null);
 
+    // Ensure that configuration panel is correct on initial render.
+    useEffect(() => {
+        resize();
+    }, [containerRef.current]);
+
+    // Ensures that configuration panel is correct on window resize.
+    useEffect(() => {
+        window.addEventListener('resize', resize);
+        return () => {
+            window.removeEventListener('resize', resize);
+        };
+    }, []);
+
     return (
         <Box
+            ref={containerRef}
             sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                gap: '20px'
+                gap: '20px',
+                height: (appHeight) ? `${appHeight}px` : 'auto',
+                overflow: 'clip'
             }}
         >
             <ConfigurationPanel
@@ -33,7 +52,8 @@ export default function QueensSolver() {
             />
             <Box
                 sx={{
-                    padding: '10px'
+                    padding: '10px',
+                    overflow: 'scroll'
                 }}
             >
                 <Board
@@ -97,5 +117,17 @@ export default function QueensSolver() {
             setBoard(QueensBoardModel.fromBoardModel((board)));
         }
     }
+
+    function resize() {
+        const configurationPanel = containerRef.current;
+        if (configurationPanel) {
+            const viewportHeight = window.innerHeight;
+            const height = viewportHeight
+                - configurationPanel.offsetTop
+                - 0;
+            setAppHeight(height);
+        }
+    }
+
 }
 
