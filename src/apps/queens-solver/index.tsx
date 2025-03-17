@@ -77,7 +77,6 @@ export default function QueensSolver() {
                 ref={boardContainerRef}
                 sx={{
                     padding: '10px',
-                    overflow: 'scroll',
                     width: '100%'
                 }}
             >
