@@ -1,4 +1,4 @@
-import { Card } from '@mui/material';
+import { Button, Card } from '@mui/material';
 import { EditMode, QueensEditModes } from './panel-sections/edit-mode';
 import { BoardSize } from './panel-sections/board-size';
 
@@ -9,6 +9,7 @@ export interface ConfigurationPanelProps {
     setEditMode: (mode: QueensEditModes) => void;
     color: string;
     setColor: (color: string) => void;
+    resetBoard: () => void;
 }
 
 export function ConfigurationPanel(props: ConfigurationPanelProps) {
@@ -18,7 +19,8 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
         editMode,
         setEditMode,
         color,
-        setColor
+        setColor,
+        resetBoard
     } = props;
 
     return (
@@ -42,6 +44,14 @@ export function ConfigurationPanel(props: ConfigurationPanelProps) {
                 color={color}
                 setColor={setColor}
             />
+            <>
+                <Button
+                    variant='contained'
+                    onClick={() => resetBoard()}
+                >
+                    Reset Board
+                </Button>
+            </>
         </Card>
     );
 }

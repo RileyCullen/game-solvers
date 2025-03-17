@@ -72,6 +72,7 @@ export default function QueensSolver() {
                 setEditMode={setEditMode}
                 color={color}
                 setColor={setColor}
+                resetBoard={() => setBoard(new QueensBoardModel(boardSize))}
             />
             <Box
                 ref={boardContainerRef}
