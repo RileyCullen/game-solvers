@@ -18,16 +18,26 @@ export type CellEventHandler = (cell: CellModel) => void;
 export interface CellProps extends CellEventHandlers {
     /** Cell properties. */
     cell: CellModel;
+    size?: string;
 }
 
 /** Cell display component. */
 export function Cell(props: CellProps) {
-    const { cell, onClick, onMouseEnter, onMouseDown, onMouseUp } = props;
+    const {
+        cell,
+        size,
+        onClick,
+        onMouseEnter,
+        onMouseDown,
+        onMouseUp
+    } = props;
     return (
         <div
             className={styles['cell-container']}
             style={{
-                backgroundColor: cell.color
+                backgroundColor: cell.color,
+                width: size ?? '100px',
+                height: size ?? '100px'
             }}
             onClick={() => onClick?.(cell)}
             onMouseEnter={() => onMouseEnter?.(cell)}

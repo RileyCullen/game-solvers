@@ -8,15 +8,27 @@ export interface BoardProps {
     /** Board information. */
     board: BoardModel;
     cellEventHandlers?: CellEventHandlers;
+    resizeCellsToFitInView?: {
+        width: number;
+        height: number;
+    };
 }
 
 /** Display component for board. */
 export function Board(props: BoardProps) {
     const {
         board,
-        cellEventHandlers
+        cellEventHandlers,
+        resizeCellsToFitInView
     } = props;
     const { cells } = board;
+
+    let cellSize: number;
+    if (resizeCellsToFitInView) {
+        const { width, height } = resizeCellsToFitInView;
+        cellSize = calculateCellSize(cells.length, width, height)
+    }
+
     return (
         <div
             className={styles.board}
@@ -26,6 +38,7 @@ export function Board(props: BoardProps) {
                     <BoardRow
                         values={row}
                         cellEventHandlers={cellEventHandlers}
+                        cellSize={cellSize}
                     />
                 ))
             }
@@ -33,18 +46,30 @@ export function Board(props: BoardProps) {
     );
 }
 
+function calculateCellSize(
+    numberOfCells: number,
+    width: number,
+    height: number
+) {
+    const restrictedAxis = (width <= height) ? width : height;
+    // subtract 10 to account for cell padding
+    return (restrictedAxis / numberOfCells) - 10;
+}
+
 /** Props for {@link BoardRow} */
 export interface BoardRowProps {
     /** Cell column values for a row. */
     values: CellModel[];
     cellEventHandlers?: CellEventHandlers;
+    cellSize: number | undefined;
 }
 
 /** Display component for a board row. */
 export function BoardRow(props: BoardRowProps) {
     const {
         values,
-        cellEventHandlers
+        cellEventHandlers,
+        cellSize
     } = props;
     return (
         <div
@@ -55,6 +80,7 @@ export function BoardRow(props: BoardRowProps) {
                     <Cell
                         {...cellEventHandlers}
                         cell={cell}
+                        size={cellSize ? `${cellSize}px` : undefined}
                     />
                 ))
             }

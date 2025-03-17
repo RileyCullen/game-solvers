@@ -6,7 +6,7 @@ import { useBoard } from './use-board';
 import { QueensEditModes } from './components/configuration-panel/panel-sections/edit-mode';
 import { ConfigurationPanel } from './components/configuration-panel/configuration-panel';
 
-interface AppDimensions {
+interface Dimensions {
     height: number;
     width: number;
 }
@@ -17,8 +17,14 @@ export default function QueensSolver() {
     const [editMode, setEditMode] = useState(QueensEditModes.CellContent);
     const [color, setColor] = useState('#FFFFFF');
 
-    const [appDimensions, setAppDimensions] = useState<AppDimensions>();
+    const [appDimensions, setAppDimensions] = useState<Dimensions>();
     const containerRef = useRef<HTMLDivElement>(null);
+
+    const [
+        boardContainerDimensions,
+        setBoardContainerDimensions
+    ] = useState<Dimensions>();
+    const boardContainerRef = useRef<HTMLDivElement>(null);
 
     const targetCells = useRef<CellModel[]>([]);
     const startingCell = useRef<CellModel>(null);
@@ -36,6 +42,17 @@ export default function QueensSolver() {
         };
     }, []);
 
+    // Set board size
+    useEffect(() => {
+        if (boardContainerRef.current) {
+            const boardContainer = boardContainerRef.current;
+            setBoardContainerDimensions({
+                width: boardContainer.offsetWidth,
+                height: boardContainer.offsetHeight
+            });
+        }
+    }, [boardContainerRef.current]);
+
     return (
         <Box
             ref={containerRef}
@@ -45,8 +62,7 @@ export default function QueensSolver() {
                 gap: '20px',
                 height: (appDimensions) ? `${appDimensions.height}px` : 'auto',
                 width: (appDimensions) ? `${appDimensions.width}px` : 'auto',
-                overflow: 'clip',
-                border: '1px solid red'
+                overflow: 'clip'
             }}
         >
             <ConfigurationPanel
@@ -58,9 +74,11 @@ export default function QueensSolver() {
                 setColor={setColor}
             />
             <Box
+                ref={boardContainerRef}
                 sx={{
                     padding: '10px',
-                    overflow: 'scroll'
+                    overflow: 'scroll',
+                    width: '100%'
                 }}
             >
                 <Board
@@ -71,6 +89,7 @@ export default function QueensSolver() {
                         onMouseDown,
                         onMouseUp
                     }}
+                    resizeCellsToFitInView={boardContainerDimensions}
                 />
             </Box>
         </Box>
